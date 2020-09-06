@@ -14,6 +14,7 @@ cv_set_label = y((length(train_set_label)+1):(length(train_set_label)+1)+floor((
 test_set = x(((length(train_set_label)+1)+floor((length(temp_imgs)*0.2))+1):end,:);
 test_set_label = y(((length(train_set_label)+1)+floor((length(temp_imgs)*0.2))+1):end);
 %%
+num_labels = 10;
 input_layer_size = 400;
 result = [];
 for hidden_layer_size = [10 30 60 100 130 160 200]
@@ -23,7 +24,7 @@ for hidden_layer_size = [10 30 60 100 130 160 200]
         Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
             hidden_layer_size, (input_layer_size + 1));
         Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
-            10, (hidden_layer_size + 1));
+            num_labels, (hidden_layer_size + 1));
         
         cv_label_temp = predict(Theta1, Theta2, cv_set);
         result_temp = mean(cv_label_temp == cv_set_label);
