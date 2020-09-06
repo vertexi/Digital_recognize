@@ -1,3 +1,4 @@
+% get the imgdata and labels that all imgdata just contain 0 or 1.
 clear;
 load training_set.mat
 % nn_params = train_parameter(x, y, hidden_layer_size, penalize)
@@ -7,6 +8,7 @@ x(find(x<0.8)) = 0;
 x(find(x~=0)) = 1;
 y(find(y==0))=10;
 %%
+% seperate the training set to train/cross validation/test sets(0.6:0.2:0.2)
 train_set = x(1:floor((length(temp_imgs)*0.6)),:);
 train_set_label = y(1:floor((length(temp_imgs)*0.6)));
 cv_set = x((length(train_set_label)+1):(length(train_set_label)+1)+floor((length(temp_imgs)*0.2)),:);
