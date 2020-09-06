@@ -16,6 +16,7 @@ cv_set_label = y((length(train_set_label)+1):(length(train_set_label)+1)+floor((
 test_set = x(((length(train_set_label)+1)+floor((length(temp_imgs)*0.2))+1):end,:);
 test_set_label = y(((length(train_set_label)+1)+floor((length(temp_imgs)*0.2))+1):end);
 %%
+% training different parameters pairs and evaluate the cv_errors
 num_labels = 10;
 input_layer_size = 400;
 result = [];
