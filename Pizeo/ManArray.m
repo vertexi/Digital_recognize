@@ -3,10 +3,10 @@ classdef ManArray
         Value
     end
     methods
-        function obj = ManArray(F)
+        function obj = ManArray(F, map_boundary)
             if nargin ~= 0
                 for i = 1:F
-                    obj(i).Value = Man;
+                    obj(i).Value = Man(map_boundary);
                 end
             end
         end
@@ -42,6 +42,16 @@ classdef ManArray
             map_array(get_index) = map_array(get_index)+position_array(:,3);
             
             imagesc(map_array, [0 max(map_array,[],'all')]);
+        end
+        
+        
+        
+        function sample
+            
+            
+            
+            
+            
         end
         
     end

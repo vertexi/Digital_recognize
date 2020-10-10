@@ -6,7 +6,7 @@ map_length = velocity_agent*8;
 map = zeros(map_length);
 tile_length = 5;
 
-a = ManArray(5);
+a = ManArray(5, 40);
 
 figure
 colormap('gray');

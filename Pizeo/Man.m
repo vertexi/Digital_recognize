@@ -2,8 +2,8 @@ classdef Man < handle
     properties(Constant)
         velocity = 1;
         move_direction = {[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]};
-        map_boundary = 40;
     end
+    
     properties
         position %man's position
         package %man's package(contains wheight and package position)
@@ -14,12 +14,14 @@ classdef Man < handle
         % 0 sit
         % 1 move
         % 2 to get package
+        map_boundary;
     end
     methods
-        function obj = Man()
+        function obj = Man(map_boundary)
             %Man's constructor
-            obj.position = randi(Man.map_boundary,1,2);
-            package.weight = 0.5;
+            obj.map_boundary = map_boundary;
+            obj.position = randi(obj.map_boundary,1,2);
+            package.weight = rand()/2;
             package.position = obj.position;
             obj.package = package;
             obj.package_status = 1;
