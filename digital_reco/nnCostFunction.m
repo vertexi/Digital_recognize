@@ -65,7 +65,7 @@ Theta2_grad = zeros(size(Theta2));
 a_1 = [ones(m, 1), X]';
 z_2 = [ones(1, m); Theta1*a_1];
 a_2 = [ones(1, m); sigmoid(Theta1*a_1)];
-a_3 = sigmoid(Theta2 * a_2);
+a_3 = sigmoid(Theta2 * a_2)-eps;
 temp_y = (repmat([1:num_labels], m, 1)==y)';
 
 J = -sum(log(a_3).*temp_y+(1-temp_y).*log(1-a_3),[1,2])/m;

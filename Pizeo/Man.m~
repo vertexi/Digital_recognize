@@ -1,0 +1,39 @@
+classdef Man < handle
+    properties(Constant)
+        velocity = 1;
+        move_direction = {[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]};
+        map_boundary = 40;
+    end
+    properties
+        position %man's position
+        package %man's package(contains wheight and package position)
+        carray_status %a man carry h
+    end
+    methods
+        function obj = Man()
+            %Man's constructor
+            obj.position = randi(Man.map_boundary,1,2);
+        end
+        
+        function move(obj)
+            
+        end
+        
+        
+        
+        function move_(obj)
+            %change the man's position
+            obj_pos = obj.position;
+            while true
+                temp = ceil(rand()*8); %generate a random integer(1~8)
+                update_pos = obj_pos+obj.move_direction{temp};
+                if (update_pos(1)<(obj.map_boundary+1)&&update_pos(2)<(obj.map_boundary+1)&&update_pos(1)>0&&update_pos(2)>0)
+                    obj.position = update_pos;
+                    break;
+                end
+            end
+        end
+        
+        
+    end
+end
