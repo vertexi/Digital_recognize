@@ -6,10 +6,13 @@ map_length = velocity_agent*8;
 map = zeros(map_length);
 tile_length = 5;
 
-a = ManArray(10);
+a = ManArray(5);
+
+figure
+colormap('gray');
+axis equal;
 while true
-    visualize(a, 40);
+    a.visualize(40);
     a.move
-    pause
     drawnow
 end
