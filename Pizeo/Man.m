@@ -65,9 +65,6 @@ classdef Man < handle
                     end
                 else
                     % don't have the package now and moving
-                    disp(obj.position)
-                    disp(obj.package.position)
-                    fprintf('\n')
                     if rand()<0.1
                         obj.man_status = 2;
                         %now I wanna get the package
