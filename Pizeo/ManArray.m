@@ -6,11 +6,19 @@ classdef ManArray
         build_in_status = 0;
     end
     methods
-        function obj = ManArray(F, map_boundary, lamp_range, build_in)
+        function obj = ManArray(F, map_boundary, lamp_range, build_in, build_in_random_map)
             if nargin ~= 0
                 if build_in==1
                     obj(1).build_in_status = build_in;
-                    obj(1).build_in_random_map = rand(map_boundary);
+                    if ~exist('build_in_random_map', 'var') || isempty(build_in_random_map)
+                        obj(1).build_in_random_map = rand(map_boundary);
+                    else
+                        if size(build_in_random_map,1)==map_boundary
+                            obj(1).build_in_random_map = build_in_random_map;
+                        else
+                            error('Wrong initial pressure map occur!')
+                        end
+                    end
                 else
                     obj(1).build_in_random_map = zeros(map_boundary);
                 end
@@ -88,7 +96,7 @@ classdef ManArray
                     lamp_regions_label(n) = 1;
                 end
             end
-            
+
             lamp_regions_final = [];
             map_array = get_pressure(obj);
             if obj(1).build_in_status==1
