@@ -6,8 +6,13 @@ classdef Man < handle
     
     properties
         position %man's position
+        weight;
         package %man's package(contains wheight and package position)
         package_status %a man carry his package
+        sit_possible %man wanna sit possibility
+        move_possible %when a man sit, the possibility he wanna move
+        get_pack_possible %when man moving without package, the possiblity of he wanna get package
+        leave_pack_possible %the possibility that when the man leaving he don't wanna get package
         %1 carray the package
         %0 detach the package
         man_status % sit status
@@ -17,15 +22,49 @@ classdef Man < handle
         map_boundary;
     end
     methods
-        function obj = Man(map_boundary)
+        function obj = Man(map_boundary, sit_prob_dist, move_prob_dist, get_prob_dist, leave_prob_dist)
             %Man's constructor
             obj.map_boundary = map_boundary;
             obj.position = randi(obj.map_boundary,1,2);
-            package.weight = rand()/2;
+            obj.weight = 0.4 + 0.4.*rand(); % human weight 40~80kg
+            package.weight = obj.weight*(0.05 + 0.1.*rand()); % package weight 5~15%*human weight
             package.position = obj.position;
             obj.package = package;
             obj.package_status = 1;
             obj.man_status = 0;
+            
+            while true
+                temp = sit_prob_dist.random;
+                if temp > 0 && temp < 1
+                    obj.sit_possible = temp;
+                    break;
+                end
+            end
+            temp = [];
+            while true
+                temp = move_prob_dist.random;
+                if temp > 0 && temp < 1
+                    obj.move_possible = temp;
+                    break;
+                end
+            end
+            temp = [];
+            while true
+                temp = get_prob_dist.random;
+                if temp > 0 && temp < 1
+                    obj.get_pack_possible = temp;
+                    break;
+                end
+            end
+            temp = [];
+            while true
+                temp = leave_prob_dist.random;
+                if temp > 0 && temp < 1
+                    obj.leave_pack_possible = temp;
+                    break;
+                end
+            end
+            temp = [];
         end
         
         
@@ -56,7 +95,7 @@ classdef Man < handle
                 % man moving
                 if obj.package_status == 1
                     % get the package and moving
-                    if rand()<0.1
+                    if rand()<obj.sit_possible
                         obj.man_status = 0;
                         % man sit now
                     else
@@ -65,7 +104,7 @@ classdef Man < handle
                     end
                 else
                     % don't have the package now and moving
-                    if rand()<0.1
+                    if rand()<obj.get_pack_possible
                         obj.man_status = 2;
                         %now I wanna get the package
                         obj.move;
@@ -76,10 +115,10 @@ classdef Man < handle
                 end
             elseif obj.man_status==0
                 % man is siting
-                if rand()<0.1
+                if rand()<obj.move_possible
                     obj.man_status = 1;
                     % ooh! I can move now!
-                    if rand()<0.1
+                    if rand()<obj.leave_pack_possible
                         obj.package_status = 0;
                         % I don't wanna carry my package
                         obj.random_move;
