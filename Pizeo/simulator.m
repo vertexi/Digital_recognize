@@ -1,7 +1,8 @@
 num_agent = 5;
 map_boundary = 40;
 lamp_range = 5;
-a = ManArray(num_agent, map_boundary, lamp_range);
+bulid_in = 1;
+a = ManArray(num_agent, map_boundary, lamp_range, bulid_in);
 
 lamp_x = [];
 lamp_y = [];
