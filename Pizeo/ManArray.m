@@ -1,5 +1,4 @@
 classdef ManArray
-
     properties
         Value
         lamp_range
@@ -8,26 +7,19 @@ classdef ManArray
     end
 
     methods
-
         function obj = ManArray(F, map_boundary, lamp_range, build_in, build_in_random_map)
-
             if nargin ~= 0
-
                 if build_in == 1
                     obj(1).build_in_status = build_in;
-
                     if ~exist('build_in_random_map', 'var') || isempty(build_in_random_map)
                         obj(1).build_in_random_map = rand(map_boundary);
                     else
-
                         if size(build_in_random_map, 1) == map_boundary
                             obj(1).build_in_random_map = build_in_random_map;
                         else
                             error('Wrong initial pressure map occur!')
                         end
-
                     end
-
                 else
                     obj(1).build_in_random_map = zeros(map_boundary);
                 end
@@ -43,9 +35,7 @@ classdef ManArray
                     obj(i).Value = Man(map_boundary, sit_prob_dist, move_prob_dist, get_prob_dist, leave_prob_dist, leave_room_prob_dist, back_room_prob_dist);
                     obj(i).lamp_range = lamp_range;
                 end
-
             end
-
         end
 
         function move(obj)
@@ -93,19 +83,22 @@ classdef ManArray
             for n = 1:num_Man
                 position_array(n, :) = obj(n).Value.position;
             end
+
             % get men weight
             for n = 1:num_Man
                 weight_array(n, :) = obj(n).Value.weight;
             end
+
             % detect men leaving status
             logical_array = [];
             for n = 1:num_Man
-                if obj(n).Value.man_status==3
+                if obj(n).Value.man_status == 3
                     logical_array(n) = 0;
                 else
                     logical_array(n) = 1;
                 end
             end
+
             logical_array = logical(logical_array);
             get_index = position_array(:, 1) + (position_array(:, 2) - 1) * maplength;
 
@@ -119,12 +112,13 @@ classdef ManArray
             % detect men leaving status
             logical_array = [];
             for n = 1:num_Man
-                if obj(n).Value.man_status==3
+                if obj(n).Value.man_status == 3
                     logical_array(n) = 0;
                 else
                     logical_array(n) = 1;
                 end
             end
+
             logical_array = logical(logical_array);
         end
 
@@ -140,11 +134,9 @@ classdef ManArray
             lamp_regions_label = zeros(len_regions, 1);
 
             for n = 1:len_regions
-
                 if sum(lamp_regions{n}, 'all') > 0
                     lamp_regions_label(n) = 1;
                 end
-
             end
 
             lamp_regions_final = [];
@@ -155,31 +147,23 @@ classdef ManArray
             end
 
             lamp_regions = mat2cell(map_array, N, N);
-
             lamp_regions = lamp_regions(:);
 
             for n = 1:len_regions
                 lamp_regions_final(n, :) = lamp_regions{n}(:);
             end
-
         end
 
         function check_prob(obj)
             num_Man = length(obj);
-
             for n = 1:num_Man
-
                 if (obj(n).Value.sit_possible < 0 || obj(n).Value.sit_possible > 1) || ...
                         (obj(n).Value.move_possible < 0 || obj(n).Value.move_possible > 1) || ...
                         (obj(n).Value.get_pack_possible < 0 || obj(n).Value.get_pack_possible > 1) || ...
                         (obj(n).Value.leave_pack_possible < 0 || obj(n).Value.leave_pack_possible > 1)
                     error('the probility is wrong over the range(0~1)');
                 end
-
             end
-
         end
-
     end
-
 end

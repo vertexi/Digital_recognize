@@ -164,7 +164,6 @@ classdef Man < handle
         end
         
         function leave_room(obj)
-            %//TODO leaving room function 我需要对采样进行调整
             if rand()<obj.back_room_possible
                 obj.man_status = 1;
             end
