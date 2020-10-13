@@ -36,10 +36,11 @@ classdef ManArray
                 move_prob_dist = makedist('Normal', 'mu', 0.3, 'sigma', 0.1);
                 get_prob_dist = makedist('Normal', 'mu', 0.3, 'sigma', 0.1);
                 leave_prob_dist = makedist('Normal', 'mu', 0.3, 'sigma', 0.1);
-
+                leave_room_prob_dist = makedist('Normal', 'mu', 0.3, 'sigma', 0.1);
+                back_room_prob_dist = makedist('Normal', 'mu', 0.3, 'sigma', 0.1);
                 for i = 1:F
                     % obj(i).build_in_random_map = obj(1).build_in_random_map;
-                    obj(i).Value = Man(map_boundary, sit_prob_dist, move_prob_dist, get_prob_dist, leave_prob_dist);
+                    obj(i).Value = Man(map_boundary, sit_prob_dist, move_prob_dist, get_prob_dist, leave_prob_dist, leave_room_prob_dist, back_room_prob_dist);
                     obj(i).lamp_range = lamp_range;
                 end
 
@@ -48,16 +49,12 @@ classdef ManArray
         end
 
         function move(obj)
-
             if nargin ~= 0
                 num = length(obj);
-
                 for i = 1:num
                     obj(i).Value.move;
                 end
-
             end
-
         end
 
         function visualize(obj)
@@ -75,13 +72,7 @@ classdef ManArray
             num_Man = length(obj);
             position_array = [];
 
-            for n = 1:num_Man
-                position_array(n, :) = obj(n).Value.position;
-            end
-
-            map_array = zeros(maplength);
-            get_index = position_array(:, 1) + (position_array(:, 2) - 1) * maplength;
-            map_array(get_index) = 1;
+            map_array = obj.get_man;
 
             for n = 1:num_Man
                 position_array(n, [1, 2]) = obj(n).Value.package.position;
@@ -98,13 +89,45 @@ classdef ManArray
             num_Man = length(obj);
             position_array = [];
 
+            % get men positions
             for n = 1:num_Man
                 position_array(n, :) = obj(n).Value.position;
             end
-
-            map_array = zeros(maplength);
+            % get men weight
+            for n = 1:num_Man
+                weight_array(n, :) = obj(n).Value.weight;
+            end
+            % detect men leaving status
+            logical_array = [];
+            for n = 1:num_Man
+                if obj(n).Value.man_status==3
+                    logical_array(n) = 0;
+                else
+                    logical_array(n) = 1;
+                end
+            end
+            logical_array = logical(logical_array);
             get_index = position_array(:, 1) + (position_array(:, 2) - 1) * maplength;
-            map_array(get_index) = 1;
+            % eliminate all leaving man
+            get_index(logical_array) = [];
+
+            % get the real man pressure
+            map_array = zeros(maplength);
+            map_array(get_index) = weight_array;
+        end
+
+        function logical_array = show_leave_man(obj)
+            num_Man = length(obj);
+            % detect men leaving status
+            logical_array = [];
+            for n = 1:num_Man
+                if obj(n).Value.man_status==3
+                    logical_array(n) = 0;
+                else
+                    logical_array(n) = 1;
+                end
+            end
+            logical_array = logical(logical_array);
         end
 
         function [lamp_regions_final, lamp_regions_label] = sample(obj)

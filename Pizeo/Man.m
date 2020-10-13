@@ -6,23 +6,26 @@ classdef Man < handle
     
     properties
         position %man's position
-        weight;
+        weight; %man's weight
         package %man's package(contains wheight and package position)
         package_status %a man carry his package
         sit_possible %man wanna sit possibility
         move_possible %when a man sit, the possibility he wanna move
         get_pack_possible %when man moving without package, the possiblity of he wanna get package
         leave_pack_possible %the possibility that when the man leaving he don't wanna get package
+        leave_room_possible % the man wanna leave this room possible
+        back_room_possible
         %1 carray the package
         %0 detach the package
         man_status % sit status
         % 0 sit
         % 1 move
         % 2 to get package
+        % 3 leave the room
         map_boundary;
     end
     methods
-        function obj = Man(map_boundary, sit_prob_dist, move_prob_dist, get_prob_dist, leave_prob_dist)
+        function obj = Man(map_boundary, sit_prob_dist, move_prob_dist, get_prob_dist, leave_prob_dist, leave_room_prob_dist, back_room_prob_dist)
             %Man's constructor
             obj.map_boundary = map_boundary;
             obj.position = randi(obj.map_boundary,1,2);
@@ -61,6 +64,22 @@ classdef Man < handle
                 temp = leave_prob_dist.random;
                 if temp > 0 && temp < 1
                     obj.leave_pack_possible = temp;
+                    break;
+                end
+            end
+            temp = [];
+            while true
+                temp = leave_room_prob_dist.random;
+                if temp > 0 && temp < 1
+                    obj.leave_room_possible = temp;
+                    break;
+                end
+            end
+            temp = [];
+            while true
+                temp = back_room_prob_dist.random;
+                if temp > 0 && temp < 1
+                    obj.back_room_possible = temp;
                     break;
                 end
             end
@@ -116,16 +135,20 @@ classdef Man < handle
             elseif obj.man_status==0
                 % man is siting
                 if rand()<obj.move_possible
-                    obj.man_status = 1;
-                    % ooh! I can move now!
                     if rand()<obj.leave_pack_possible
                         obj.package_status = 0;
-                        % I don't wanna carry my package
-                        obj.random_move;
-                        % now move
+                        % I don't wanna carry my package 
                     else
                         obj.package_status = 1;
                         % I will carry my package
+                    end
+                    if rand()<obj.leave_room_possible
+                        obj.man_status = 3;
+                        % now step by step leaving the room
+                        obj.move;
+                    else
+                        obj.man_status = 1;
+                        % ooh! I can move now!
                         obj.random_move;
                         % now move
                     end
@@ -135,10 +158,19 @@ classdef Man < handle
                 end
             elseif obj.man_status==2
                 obj.get_package;
+            elseif obj.man_status==3
+                obj.leave_room;
             end
-            
         end
         
+        function leave_room(obj)
+            %//TODO leaving room function 我需要对采样进行调整
+            if rand()<obj.back_room_possible
+                obj.man_status = 1;
+            end
+        end
+
+
         function get_package(obj)
             % step by step get the man's package as soon as possible
             obj_pos = obj.position;
