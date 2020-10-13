@@ -1,4 +1,5 @@
-num_agent = 400;
+function [lamp_x,lamp_y] = simulator()
+num_agent = 200;
 map_boundary = 40;
 lamp_range = 5;
 bulid_in = 0;
@@ -19,11 +20,12 @@ while counter>0
     % a.visualize;
 
     a.move
-    [temp_x temp_y] = a.sample;
+    [temp_x,temp_y] = a.sample;
     lamp_x = [lamp_x;temp_x];
     lamp_y = [lamp_y;temp_y];
     counter = counter-1;
     % drawnow
+end
 end
 % //TODO 内置多种预定的压力图和对应的标签 比如全是包裹 一排全是 一列全是 对角线全是包裹 等等为0的情况
 % 尝试 动态调整 人的数量 来使整个模型的样本 更具有普适性 和 适应性

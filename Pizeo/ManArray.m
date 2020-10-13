@@ -108,12 +108,10 @@ classdef ManArray
             end
             logical_array = logical(logical_array);
             get_index = position_array(:, 1) + (position_array(:, 2) - 1) * maplength;
-            % eliminate all leaving man
-            get_index(logical_array) = [];
 
             % get the real man pressure
             map_array = zeros(maplength);
-            map_array(get_index) = weight_array;
+            map_array(get_index(logical_array)) = weight_array(logical_array);
         end
 
         function logical_array = show_leave_man(obj)
