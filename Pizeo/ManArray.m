@@ -165,5 +165,9 @@ classdef ManArray
                 end
             end
         end
+
+        function generate_typical_sample(obj)
+            
+        end
     end
 end

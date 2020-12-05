@@ -1,8 +1,0 @@
-lambda = 0.1;
-MaxIter = 1000;
-[lamp_x,lamp_y] = simulator();
-sample_num = [1:100:1000];
-for n in sample_num
-end
-net = train(lamp_x,lamp_y,lambda,MaxIter);
-metric(lamp_x, lamp_y, net)
